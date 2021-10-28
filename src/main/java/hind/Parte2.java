@@ -17,7 +17,7 @@ public class Parte2 {
         //declaracion y initializacion variables
         int consumoAparato, opcion;
         double horasPunta, horasLlanas, horasValle, totalConsumacionHorasPunta, totalConsumacionHorasLlanas, totalConsumacionHorasValle, totalCastadoAparato,
-                precioHorasPunta, precioHorasLlanas, precioHorasValle;
+                precioHorasPunta, precioHorasLlanas, precioHorasValle, horasfuncion;
         //CONSTANTES
         int KW = 1000;
 
@@ -41,30 +41,60 @@ public class Parte2 {
                     System.out.println("Introducir cuántas horas está funcionando el aparato en horas punta: ");
                     horasPunta = sc.nextDouble();
 
-                    System.out.println("Introducir cuántas horas está funcionando el aparato en horas llans: ");
-                    horasLlanas = sc.nextDouble();
+                    do {
+                        System.out.println("Introducir cuántas horas está funcionando el aparato en horas llans: ");
+                        horasLlanas = sc.nextDouble();
+                        if (horasLlanas >= horasPunta || horasPunta + horasLlanas > 24) {
+                            System.out.println("Error.Introduce otravez la horas llanas tienen que ser menos que horas punta");
+                        }
 
-                    System.out.println("Introducir cuántas horas está funcionando el aparato en horas valle: ");
-                    horasValle = sc.nextDouble();
-                } while (horasPunta > 24 || horasLlanas > 24 || horasValle > 24);
+                    } while (horasLlanas >= horasPunta || horasPunta + horasLlanas > 24);
+
+                    do {
+
+                        System.out.println("Introducir cuántas horas está funcionando el aparato en horas valle: ");
+                        horasValle = sc.nextDouble();
+                        if (horasValle >= horasLlanas || horasValle >= horasPunta) {
+                            System.out.println("Error.Introduce otravez la horaValle tiene que ser menos que horas llanas y horas valle");
+                        }
+
+                    } while (horasValle >= horasLlanas || horasValle >= horasPunta);
+
+                    horasfuncion = horasValle + horasLlanas + horasPunta;
+
+                    if (horasfuncion <= 0 || horasfuncion > 24) {
+                        System.out.println("Error las horas tienen que ser mas que 0 y menos que 24h");
+                    }
+                } while (horasfuncion <= 0 || horasfuncion > 24);
 
                 //controlar el valor del precio que debe ser entre 0.1 y 0.45 
+                System.out.println("-----------Introducir el precio del kWh entre 0.1 y 0.45------------");
+                //contralar que el precioPunto seria el mas caro y despues precio de horas llanas y despues de horas valles si no se repete pedir datos
+
                 do {
-                    System.out.println("-----------Introducir el precio del kWh entre 0.1 y 0.45------------");
-                    //contralar que el precioPunto seria el mas caro y despues precio de horas llanas y despues de horas valles si no se repete pedir datos
-                    do {
-                        System.out.println("Introducir el precio de horas punta");
-                        precioHorasPunta = sc.nextDouble();
+                    System.out.println("Introducir el precio de horas punta");
+                    precioHorasPunta = sc.nextDouble();
+                    if (precioHorasPunta < 0.1 || precioHorasPunta > 0.45) {
+                        System.out.println("el precio tiene que estar entre 0.1 y 0.45");
+                    }
+                } while (precioHorasPunta < 0.1 || precioHorasPunta > 0.45);
 
-                        System.out.println("Introducir el precio de horas llanas");
-                        precioHorasLlanas = sc.nextDouble();
+                do {
+                    System.out.println("Introducir el precio de horas llanas");
+                    precioHorasLlanas = sc.nextDouble();
+                    if (precioHorasLlanas > precioHorasPunta) {
+                        System.out.println("Error.el precio de horas llanas tiene que ser menos que de horas puntas");
+                    }
+                } while (precioHorasLlanas > precioHorasPunta || precioHorasLlanas < 0.1 || precioHorasLlanas > 0.45);
 
-                        System.out.println("Introducir el precio de horas valle");
-                        precioHorasValle = sc.nextDouble();
+                do {
+                    System.out.println("Introducir el precio de horas valle");
+                    precioHorasValle = sc.nextDouble();
+                    if (precioHorasValle > precioHorasLlanas || precioHorasValle > precioHorasPunta || precioHorasValle < 0.1 || precioHorasValle > 0.45) {
+                        System.out.println("Error.el precio tiene que ser menos del horas llanas y horas punta y entre 0.1 y 0.45");
+                    }
 
-                    } while (precioHorasValle > precioHorasLlanas || precioHorasValle > precioHorasPunta || precioHorasLlanas > precioHorasPunta);
-
-                } while ((precioHorasPunta < 0.1 && precioHorasLlanas < 0.1 && precioHorasValle < 0.1) || (precioHorasPunta > 0.45 && precioHorasLlanas > 0.45 && precioHorasValle > 0.45));
+                } while (precioHorasValle > precioHorasLlanas || precioHorasValle > precioHorasPunta || precioHorasValle < 0.1 || precioHorasValle > 0.45);
 
                 //calcular el total de consumo,calculamos el total de consumo de cada tipo de horas y despues hacemos la suma
                 totalConsumacionHorasPunta = ((consumoAparato * horasPunta) / KW * precioHorasPunta);
@@ -73,12 +103,13 @@ public class Parte2 {
 
                 totalCastadoAparato = totalConsumacionHorasPunta + totalConsumacionHorasLlanas + totalConsumacionHorasValle;
 
-                System.out.printf("Entonces el Aparato ha gastado %.2f\n ", totalCastadoAparato - 0.005);
+                System.out.printf("Entonces el Aparato ha gastado %.2f\n ", totalCastadoAparato);
 
+            } else if (opcion != 1 && opcion != 2) {
+                System.out.println("Error.introduce opcion valida");
             } else {
                 System.out.println("-------------------------------------");
                 System.out.println("Finalizar");
-
             }
 
         } while (opcion != 2);
